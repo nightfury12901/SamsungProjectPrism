@@ -290,6 +290,23 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Gaming Studio Special Styling */
+        .loading.gaming {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+            border-radius: 16px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+        }
+
+        .loading.gaming .spinner {
+            border-top: 3px solid #FF6B6B;
+        }
+
+        .loading.gaming p {
+            color: #FF6B6B;
+            font-weight: 600;
+        }
+
         @media (max-width: 768px) {
             .onboarding-card {
                 padding: 2rem;
@@ -516,11 +533,23 @@
                 return;
             }
 
-            // Show loading
+            // Show loading with special styling for gaming
             document.querySelectorAll('.form-step').forEach(step => {
                 step.classList.remove('active');
             });
-            document.getElementById('loading').classList.add('active');
+            
+            const loadingDiv = document.getElementById('loading');
+            loadingDiv.classList.add('active');
+            
+            // Add special gaming styling
+            if (selectedInfluencerType === 'gaming') {
+                loadingDiv.classList.add('gaming');
+                loadingDiv.innerHTML = `
+                    <div class="spinner"></div>
+                    <p>🎮 Loading ALLURA Gaming Studio...</p>
+                    <p style="font-size: 0.9rem; color: #4ECDC4; margin-top: 1rem;">Professional video editing for content creators</p>
+                `;
+            }
 
             // Store user data
             userData.influencerType = selectedInfluencerType;
@@ -528,18 +557,24 @@
 
             // Redirect after 2 seconds
             setTimeout(() => {
-                const studioPages = {
-                    gaming: 'gaming-studio.html',
-                    travel: 'travel-studio.html',
-                    fashion: 'fashion-studio.html',
-                    finance: 'finance-studio.html',
-                    beauty: 'beauty-studio.html',
-                    tech: 'tech-studio.html',
-                    universal: 'universal-studio.html'
-                };
-
-                window.location.href = studioPages[selectedInfluencerType];
-            }, 2000);
+                if (selectedInfluencerType === 'gaming') {
+                    // Redirect to your localhost gaming studio
+                    window.location.href = 'http://localhost:3000'; // ← Your React app URL
+                } else {
+                    // For other types, redirect to placeholder pages
+                    const studioPages = {
+                        travel: 'travel-studio.html',
+                        fashion: 'fashion-studio.html',
+                        finance: 'finance-studio.html',
+                        beauty: 'beauty-studio.html',
+                        tech: 'tech-studio.html',
+                        universal: 'universal-studio.html'
+                    };
+                    
+                    // You can create simple placeholder pages or redirect to the main studio too
+                    window.location.href = studioPages[selectedInfluencerType] || 'http://localhost:3000';
+                }
+            }, 2500); // Slightly longer for better UX
         }
 
         // Auto-focus and keyboard shortcuts
